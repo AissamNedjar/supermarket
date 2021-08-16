@@ -19,7 +19,7 @@
 
 database/seeds -> UsersTableSeeder.php
 
-بعد التعدي على البينات الم\لوبة
+بعد التعديل على البينات المطلوبة
 
 php artisan migrate
 
