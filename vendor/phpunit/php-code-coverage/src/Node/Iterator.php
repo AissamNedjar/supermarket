@@ -1,19 +1,21 @@
-<?php
+<?php declare(strict_types=1);
 /*
- * This file is part of the php-code-coverage package.
+ * This file is part of phpunit/php-code-coverage.
  *
  * (c) Sebastian Bergmann <sebastian@phpunit.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace SebastianBergmann\CodeCoverage\Node;
 
+use function count;
+use RecursiveIterator;
+
 /**
- * Recursive iterator for node object graphs.
+ * @internal This class is not covered by the backward compatibility promise for phpunit/php-code-coverage
  */
-final class Iterator implements \RecursiveIterator
+final class Iterator implements RecursiveIterator
 {
     /**
      * @var int
@@ -27,7 +29,7 @@ final class Iterator implements \RecursiveIterator
 
     public function __construct(Directory $node)
     {
-        $this->nodes = $node->getChildNodes();
+        $this->nodes = $node->children();
     }
 
     /**
@@ -43,7 +45,7 @@ final class Iterator implements \RecursiveIterator
      */
     public function valid(): bool
     {
-        return $this->position < \count($this->nodes);
+        return $this->position < count($this->nodes);
     }
 
     /**
@@ -57,7 +59,7 @@ final class Iterator implements \RecursiveIterator
     /**
      * Returns the current element.
      */
-    public function current(): AbstractNode
+    public function current(): ?AbstractNode
     {
         return $this->valid() ? $this->nodes[$this->position] : null;
     }
@@ -72,8 +74,6 @@ final class Iterator implements \RecursiveIterator
 
     /**
      * Returns the sub iterator for the current element.
-     *
-     * @return Iterator
      */
     public function getChildren(): self
     {
@@ -82,8 +82,6 @@ final class Iterator implements \RecursiveIterator
 
     /**
      * Checks whether the current element has children.
-     *
-     * @return bool
      */
     public function hasChildren(): bool
     {

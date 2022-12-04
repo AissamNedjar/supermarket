@@ -13,6 +13,11 @@
 
 // Cache
 
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\DashboardController;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Route;
+
 Route::get('/aissamc', function() {
 	$exitCode = Artisan::call('config:cache');
 	$exitCode = Artisan::call('route:clear');
@@ -23,34 +28,38 @@ Route::get('/aissamc', function() {
 
 // Auth
 
-Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
-Route::post('login', 'Auth\LoginController@login')->name('login');
-Route::get('logout', 'Auth\LoginController@logout')->name('logout');
+Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('login', [LoginController::class, 'login'])->name('login');
+Route::get('logout', [LoginController::class, 'logout'])->name('logout');
 
 // Dashboard
 
-Route::get('/', 'DashboardController@home')->name('dashboard');
-Route::post('/', 'DashboardController@home')->name('dashboard');
+Route::get('/', [DashboardController::class, 'home'])->name('dashboard');
+Route::post('/', [DashboardController::class, 'home'])->name('dashboard');
 
-Route::get('/ticket/{id}', 'DashboardController@ticket')->name('ticket');
-Route::post('/ticket/{id}', 'DashboardController@ticket')->name('ticket');
+Route::get('/ticket/{id}', [DashboardController::class, 'ticket'])->name('ticket');
+Route::post('/ticket/{id}', [DashboardController::class, 'ticket'])->name('ticket');
 
-Route::post('/addbuy/{id}', 'DashboardController@addbuy')->name('addbuy');
+Route::post('/addbuy/{id}', [DashboardController::class, 'addbuy'])->name('addbuy');
 
-Route::post('/icondelete/{id}', 'DashboardController@icondelete')->name('icondelete');
-Route::post('/iconplus/{id}', 'DashboardController@iconplus')->name('iconplus');
-Route::post('/iconminus/{id}', 'DashboardController@iconminus')->name('iconminus');
+Route::post('/icondelete/{id}', [DashboardController::class, 'icondelete'])->name('icondelete');
+Route::post('/iconplus/{id}', [DashboardController::class, 'iconplus'])->name('iconplus');
+Route::post('/iconminus/{id}', [DashboardController::class, 'iconminus'])->name('iconminus');
 
-Route::post('/print/{id}', 'DashboardController@print')->name('print');
+Route::post('/print/{id}', [DashboardController::class, 'print'])->name('print');
 
-Route::get('/items/list', 'DashboardController@items')->name('items');
-Route::post('/items/list', 'DashboardController@items')->name('items');
+Route::get('/items/list', [DashboardController::class, 'items'])->name('items');
+Route::post('/items/list', [DashboardController::class, 'items'])->name('items');
 
-Route::get('/tickets/list', 'DashboardController@tickets')->name('tickets');
-Route::post('/tickets/list', 'DashboardController@tickets')->name('tickets');
+Route::get('/tickets/list', [DashboardController::class, 'tickets'])->name('tickets');
+Route::post('/tickets/list', [DashboardController::class, 'tickets'])->name('tickets');
 
-Route::get('/items/addedit/{id}', 'DashboardController@addEditItem')->name('addedititem');
-Route::post('/items/addedit/{id}', 'DashboardController@addEditItem')->name('addedititem');
+Route::get('/items/addedit/{id}', [DashboardController::class, 'addEditItem'])->name('addedititem');
+Route::post('/items/addedit/{id}', [DashboardController::class, 'addEditItem'])->name('addedititem');
 
-Route::get('/items/store/{id}', 'DashboardController@storeItem')->name('storeitem');
-Route::post('/items/store/{id}', 'DashboardController@storeItem')->name('storeitem');
+Route::get('/items/store/{id}', [DashboardController::class, 'storeItem'])->name('storeitem');
+Route::post('/items/store/{id}', [DashboardController::class, 'storeItem'])->name('storeitem');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

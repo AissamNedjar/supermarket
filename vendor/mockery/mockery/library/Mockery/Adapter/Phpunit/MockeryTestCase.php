@@ -23,4 +23,13 @@ namespace Mockery\Adapter\Phpunit;
 abstract class MockeryTestCase extends \PHPUnit\Framework\TestCase
 {
     use MockeryPHPUnitIntegration;
+    use MockeryTestCaseSetUp;
+
+    protected function mockeryTestSetUp()
+    {
+    }
+
+    protected function mockeryTestTearDown()
+    {
+    }
 }
