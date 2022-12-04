@@ -11,19 +11,21 @@
 
 مشروع بسيط تم عمله في 48 ساعة يقوم بتسيير محل تجاري صغير
 
-المشروع مبني على منصة laravel 5.7.2
+المشروع مبني على منصة laravel 9.19
 
 ## تنصيب المشروع
 
-بعد التحميل اذهب الى
+بعد التحميل:
 
+1- composer install / composer update
+
+2-
+إذهب إلى
 database/seeds -> UsersTableSeeder.php
 
 بعد التعديل على البيانات المطلوبة
 
-php artisan migrate
-
-php artisan db:seed
+php artisan migrate --seed
 
 php artisan serve
 
