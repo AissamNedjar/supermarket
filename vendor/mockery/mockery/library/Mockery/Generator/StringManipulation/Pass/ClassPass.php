@@ -37,6 +37,7 @@ class ClassPass implements Pass
         }
 
         $className = ltrim($target->getName(), "\\");
+
         if (!class_exists($className)) {
             \Mockery::declareClass($className);
         }

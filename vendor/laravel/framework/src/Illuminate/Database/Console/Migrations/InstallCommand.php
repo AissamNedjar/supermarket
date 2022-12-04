@@ -3,8 +3,8 @@
 namespace Illuminate\Database\Console\Migrations;
 
 use Illuminate\Console\Command;
-use Symfony\Component\Console\Input\InputOption;
 use Illuminate\Database\Migrations\MigrationRepositoryInterface;
+use Symfony\Component\Console\Input\InputOption;
 
 class InstallCommand extends Command
 {
@@ -53,7 +53,7 @@ class InstallCommand extends Command
 
         $this->repository->createRepository();
 
-        $this->info('Migration table created successfully.');
+        $this->components->info('Migration table created successfully.');
     }
 
     /**

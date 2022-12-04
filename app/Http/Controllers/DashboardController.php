@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Buy;
+use App\Models\Item;
+use App\Models\Sale;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+use  Validator;
 
-use Auth, Validator, App\Item, App\Sale, App\Buy, App\User;
 
 class DashboardController extends Controller
 {

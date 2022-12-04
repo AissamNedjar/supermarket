@@ -3,7 +3,7 @@
 /*
  * This file is part of Psy Shell.
  *
- * (c) 2012-2018 Justin Hileman
+ * (c) 2012-2022 Justin Hileman
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -33,7 +33,7 @@ class ExecutionLoopClosure extends ExecutionClosure
             // Restore execution scope variables
             \extract($__psysh__->getScopeVariables(false));
 
-            do {
+            while (true) {
                 $__psysh__->beforeLoop();
 
                 try {
@@ -41,7 +41,9 @@ class ExecutionLoopClosure extends ExecutionClosure
 
                     try {
                         // Pull in any new execution scope variables
-                        \extract($__psysh__->getScopeVariablesDiff(\get_defined_vars()));
+                        if ($__psysh__->getLastExecSuccess()) {
+                            \extract($__psysh__->getScopeVariablesDiff(\get_defined_vars()));
+                        }
 
                         // Buffer stdout; we'll need it later
                         \ob_start([$__psysh__, 'writeStdout'], 1);
@@ -53,24 +55,15 @@ class ExecutionLoopClosure extends ExecutionClosure
                         $_ = eval($__psysh__->onExecute($__psysh__->flushCode() ?: ExecutionClosure::NOOP_INPUT));
                     } catch (\Throwable $_e) {
                         // Clean up on our way out.
-                        \restore_error_handler();
                         if (\ob_get_level() > 0) {
                             \ob_end_clean();
                         }
 
                         throw $_e;
-                    } catch (\Exception $_e) {
-                        // Clean up on our way out.
+                    } finally {
+                        // Won't be needing this anymore
                         \restore_error_handler();
-                        if (\ob_get_level() > 0) {
-                            \ob_end_clean();
-                        }
-
-                        throw $_e;
                     }
-
-                    // Won't be needing this anymore
-                    \restore_error_handler();
 
                     // Flush stdout (write to shell output, plus save to magic variable)
                     \ob_end_flush();
@@ -96,7 +89,7 @@ class ExecutionLoopClosure extends ExecutionClosure
                 }
 
                 $__psysh__->afterLoop();
-            } while (true);
+            }
         });
     }
 }

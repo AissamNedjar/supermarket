@@ -65,7 +65,7 @@ data-open="hover" data-menu="horizontal-menu" data-col="1-column">
                                         <form class="form form-horizontal" action="{{ route('login') }}" method="post">
                                             @csrf
                                             <fieldset class="form-group position-relative has-icon-left">
-                                                <input type="text" class="form-control{{ $errors->has('phone') ? ' is-invalid' : '' }}" placeholder="رقم الهاتف" name="phone" value="0770000000">
+                                                <input type="text" class="form-control{{ $errors->has('phone') ? ' is-invalid' : '' }}" placeholder="رقم الهاتف" name="phone" value="077">
                                                 <div class="form-control-position">
                                                     <i class="ft-phone"></i>
                                                 </div>

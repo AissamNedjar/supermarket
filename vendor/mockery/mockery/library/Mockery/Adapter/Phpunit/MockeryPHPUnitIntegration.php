@@ -28,13 +28,15 @@ use Mockery;
  */
 trait MockeryPHPUnitIntegration
 {
+    use MockeryPHPUnitIntegrationAssertPostConditions;
+
     protected $mockeryOpen;
 
     /**
      * Performs assertions shared by all tests of a test case. This method is
      * called before execution of a test ends and before the tearDown method.
      */
-    protected function assertPostConditions()
+    protected function mockeryAssertPostConditions()
     {
         $this->addMockeryExpectationsToAssertionCount();
         $this->checkMockeryExceptions();

@@ -2,15 +2,12 @@
 
 namespace Illuminate\Notifications;
 
-use InvalidArgumentException;
-use Illuminate\Support\Manager;
-use Nexmo\Client as NexmoClient;
-use GuzzleHttp\Client as HttpClient;
-use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Bus\Dispatcher as Bus;
-use Nexmo\Client\Credentials\Basic as NexmoCredentials;
-use Illuminate\Contracts\Notifications\Factory as FactoryContract;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Notifications\Dispatcher as DispatcherContract;
+use Illuminate\Contracts\Notifications\Factory as FactoryContract;
+use Illuminate\Support\Manager;
+use InvalidArgumentException;
 
 class ChannelManager extends Manager implements DispatcherContract, FactoryContract
 {
@@ -37,8 +34,8 @@ class ChannelManager extends Manager implements DispatcherContract, FactoryContr
      */
     public function send($notifiables, $notification)
     {
-        return (new NotificationSender(
-            $this, $this->app->make(Bus::class), $this->app->make(Dispatcher::class), $this->locale)
+        (new NotificationSender(
+            $this, $this->container->make(Bus::class), $this->container->make(Dispatcher::class), $this->locale)
         )->send($notifiables, $notification);
     }
 
@@ -52,8 +49,8 @@ class ChannelManager extends Manager implements DispatcherContract, FactoryContr
      */
     public function sendNow($notifiables, $notification, array $channels = null)
     {
-        return (new NotificationSender(
-            $this, $this->app->make(Bus::class), $this->app->make(Dispatcher::class), $this->locale)
+        (new NotificationSender(
+            $this, $this->container->make(Bus::class), $this->container->make(Dispatcher::class), $this->locale)
         )->sendNow($notifiables, $notification, $channels);
     }
 
@@ -75,7 +72,7 @@ class ChannelManager extends Manager implements DispatcherContract, FactoryContr
      */
     protected function createDatabaseDriver()
     {
-        return $this->app->make(Channels\DatabaseChannel::class);
+        return $this->container->make(Channels\DatabaseChannel::class);
     }
 
     /**
@@ -85,7 +82,7 @@ class ChannelManager extends Manager implements DispatcherContract, FactoryContr
      */
     protected function createBroadcastDriver()
     {
-        return $this->app->make(Channels\BroadcastChannel::class);
+        return $this->container->make(Channels\BroadcastChannel::class);
     }
 
     /**
@@ -95,33 +92,7 @@ class ChannelManager extends Manager implements DispatcherContract, FactoryContr
      */
     protected function createMailDriver()
     {
-        return $this->app->make(Channels\MailChannel::class);
-    }
-
-    /**
-     * Create an instance of the Nexmo driver.
-     *
-     * @return \Illuminate\Notifications\Channels\NexmoSmsChannel
-     */
-    protected function createNexmoDriver()
-    {
-        return new Channels\NexmoSmsChannel(
-            new NexmoClient(new NexmoCredentials(
-                $this->app['config']['services.nexmo.key'],
-                $this->app['config']['services.nexmo.secret']
-            )),
-            $this->app['config']['services.nexmo.sms_from']
-        );
-    }
-
-    /**
-     * Create an instance of the Slack driver.
-     *
-     * @return \Illuminate\Notifications\Channels\SlackWebhookChannel
-     */
-    protected function createSlackDriver()
-    {
-        return new Channels\SlackWebhookChannel(new HttpClient);
+        return $this->container->make(Channels\MailChannel::class);
     }
 
     /**
@@ -138,7 +109,7 @@ class ChannelManager extends Manager implements DispatcherContract, FactoryContr
             return parent::createDriver($driver);
         } catch (InvalidArgumentException $e) {
             if (class_exists($driver)) {
-                return $this->app->make($driver);
+                return $this->container->make($driver);
             }
 
             throw $e;
